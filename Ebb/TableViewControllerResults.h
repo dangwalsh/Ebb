@@ -12,9 +12,12 @@
 
 @interface TableViewControllerResults : UITableViewController {
     Model *model;
-    //NSIndexPath *indexPath;
+    UISlider *slider;
+    NSString *val;
+    int n;
 }
 - (id) initWithStyle:(UITableViewStyle) style
                model: (Model *) m
            indexPath: (NSIndexPath *) p;
+- (void) sliderValueChanged:(id) sender; 
 @end

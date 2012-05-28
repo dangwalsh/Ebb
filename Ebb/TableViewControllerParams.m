@@ -20,7 +20,7 @@
         model = m;
         indexPath = [p copy];
         
-        self.title = [[model section: p] objectAtIndex:p.row];;
+        self.title = [[model inputLabelNames: p] objectAtIndex:p.row];;
         self.navigationItem.backBarButtonItem.title = self.title;
     }
     return self;
@@ -90,21 +90,20 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    //NSArray *paramGroup = [model getValues:indexPath];
-    //return paramGroup.count;
     return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)p
 {
     static NSString *CellIdentifier = @"Cell";
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 
                                       reuseIdentifier:CellIdentifier];
 	}
     // Configure the cell...
-    NSArray *paramGroup = [model getValues: indexPath];
+    NSArray *paramGroup = [model inputDetailValues: indexPath];
     cell.textLabel.text = [NSString stringWithFormat:@"%g", 
                            [[paramGroup objectAtIndex: indexPath.row] floatValue]];
 
@@ -180,7 +179,7 @@
 	textField.backgroundColor = selected.textLabel.backgroundColor;
 	textField.textColor = selected.textLabel.textColor;
 	textField.text = selected.textLabel.text;
-	selected.textLabel.text = @" ";
+	selected.textLabel.hidden = YES;
 	textField.font = font;
 	[selected.contentView addSubview: textField];
 	[textField becomeFirstResponder];   //show the keyboard
@@ -205,9 +204,10 @@
 - (void) textFieldDidEndEditing: (UITextField *) t
 {
     NSInteger newInteger = [textField.text intValue];//[[textField.text substringWithRange: NSMakeRange(0, 2)] integerValue];
-    NSMutableArray *paramGroup = [model updateValues: indexPath];
+    NSMutableArray *paramGroup = [model updateDetailValues: indexPath];
     [paramGroup replaceObjectAtIndex:indexPath.row withObject:[NSNumber numberWithInt:newInteger]];
 	selected.textLabel.text = textField.text;
+    selected.textLabel.hidden = NO;
     [t removeFromSuperview];
 	selected = nil;
 	textField = nil;

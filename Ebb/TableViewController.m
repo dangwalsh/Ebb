@@ -86,14 +86,14 @@
 {
     // Return the number of sections.
 
-    return [model numberOfSections];
+    return [model numberOfInputSections];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
 
-    return [model numberOfRowsInSection: section];
+    return [model numberOfInputRowsPerSection: section];
 }
 
 - (UITableViewCell *)tableView: (UITableView *)tableView cellForRowAtIndexPath: (NSIndexPath *) indexPath
@@ -109,15 +109,16 @@
     
     // Configure the cell...
     
+    // Initialize number formatters
     NSNumberFormatter *formatCur = [[NSNumberFormatter alloc] init];
     [formatCur setNumberStyle:NSNumberFormatterCurrencyStyle];
     NSNumberFormatter *formatPer = [[NSNumberFormatter alloc] init];
     [formatPer setNumberStyle:NSNumberFormatterPercentStyle];
     
-    NSArray *propGroup = [model section:indexPath];
+    NSArray *propGroup = [model inputLabelNames:indexPath];
     cell.textLabel.text = [propGroup objectAtIndex: indexPath.row];
     
-    NSArray *paramGroup = [model getValues:indexPath];
+    NSArray *paramGroup = [model inputDetailValues:indexPath];
     float f = [[paramGroup objectAtIndex: indexPath.row] floatValue];
     
     if (f < 1.0 && f > 0.0) {
@@ -135,7 +136,7 @@
 }
 
 - (NSString *) tableView: (UITableView *) tableView titleForHeaderInSection: (NSInteger) section {
-	return [model headers: section];
+	return [model inputHeaderNames: section];
 }
 
 /*

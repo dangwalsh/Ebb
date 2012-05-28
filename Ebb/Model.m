@@ -11,21 +11,25 @@
 
 @implementation Model
 
+@synthesize currentAge;
+@synthesize lifeExpectancy;
+@synthesize resultsAge;
+
 - (id) init {
     self = [super init];
     if (self) {
 
-        headers = [NSArray arrayWithObjects:
-                   @"Personal Information",
-                   @"Assets - Savings",
-                   @"Assets - SEP",
-                   @"Assets - IRA/401k",
-                   @"Assets - Taxable Invest",
-                   @"Inflation",
-                   nil
-                   ];
+        inputHeaders = [NSArray arrayWithObjects:
+                        @"Personal Information",
+                        @"Assets - Savings",
+                        @"Assets - SEP",
+                        @"Assets - IRA/401k",
+                        @"Assets - Taxable Invest",
+                        @"Inflation",
+                        nil
+                        ];
         
-        properties = [NSArray arrayWithObjects:
+        inputLabels = [NSArray arrayWithObjects:
                       
                       //Personal Information
                       [NSArray arrayWithObjects:
@@ -84,7 +88,7 @@
                       nil
                       ];
         
-        parameters = [NSMutableArray arrayWithObjects:
+        inputDetails = [NSMutableArray arrayWithObjects:
                       
                       //Personal Information
                       [NSMutableArray arrayWithObjects:
@@ -143,28 +147,39 @@
                       nil
                       ];
         
-        outputs = [NSArray arrayWithObjects:
-                   [NSArray arrayWithObjects:
-                    @"Required Income",
-                    @"Income",
-                    @"Savings",
-                    @"Retirement A",
-                    @"Retirement B",
-                    @"Taxable Invest",
-                    @"Retired?",
-                    @"Taxable Invest DD",
-                    @"Retirement A DD",
-                    @"Total Assets",
-                    @"NW Change",
-                    @"NW Change %",
-                    nil
-                    ],
-                   
-                   nil
-                   ];
+        outputHeaders = [NSArray arrayWithObjects:
+                         @"Results", 
+                         nil
+                         ];
         
-        results = [NSMutableArray arrayWithObjects:
+        outputLabels = [NSArray arrayWithObjects:
+
+                        //labels for results
+                        [NSArray arrayWithObjects:
+                         @"Age Adjustment",
+                         @"Required Income",
+                         @"Income",
+                         @"Savings",
+                         @"Retirement A",
+                         @"Retirement B",
+                         @"Taxable Invest",
+                         @"Retired?",
+                         @"Taxable Invest DD",
+                         @"Retirement A DD",
+                         @"Total Assets",
+                         @"NW Change",
+                         @"NW Change %",
+                         nil
+                         ],
+                   
+                        nil
+                        ];
+        
+        outputDetails = [NSMutableArray arrayWithObjects:
+
+                   //starting values to fill the array
                    [NSMutableArray arrayWithObjects:
+                    [NSNumber numberWithFloat:0],
                     [NSNumber numberWithFloat:0],
                     [NSNumber numberWithFloat:0],
                     [NSNumber numberWithFloat:0],
@@ -177,9 +192,9 @@
                     [NSNumber numberWithFloat:0],
                     [NSNumber numberWithFloat:0],
                     [NSNumber numberWithFloat:0],
-                    nil
+                    nil                    
                     ],
-                   
+                  
                    nil
                    ];
                    
@@ -187,71 +202,91 @@
     return self;
 }
 
-- (NSUInteger) numberOfSections {
-    return properties.count;
+//methods for user input view
+
+- (NSUInteger) numberOfInputSections {
+    return inputLabels.count;
 }
 
-//Return the number of subtrees of the tree to which the indexPath leads.
-
-- (NSUInteger) numberOfRowsInSection: (NSInteger) section
+- (NSUInteger) numberOfInputRowsPerSection: (NSInteger) section
 {
-    NSArray *paramGroup = [properties objectAtIndex: section];
-    return paramGroup.count;
+    NSArray *inGroup = [inputLabels objectAtIndex: section];
+    return inGroup.count;
 }
 
-- (NSString *) headers: (NSInteger) section {
-    return [headers objectAtIndex:section];
+- (NSString *) inputHeaderNames: (NSInteger) section {
+    return [inputHeaders objectAtIndex:section];
 }
 
-- (NSArray *) section: (NSIndexPath *) indexPath {
-    return [properties objectAtIndex: indexPath.section];
+- (NSArray *) inputLabelNames: (NSIndexPath *) indexPath {
+    return [inputLabels objectAtIndex: indexPath.section];
 }
 
-- (NSArray *) getValues: (NSIndexPath *) indexPath {
-    return [parameters objectAtIndex: indexPath.section];
+- (NSArray *) inputDetailValues: (NSIndexPath *) indexPath {
+    return [inputDetails objectAtIndex: indexPath.section];
 }
 
-- (NSMutableArray *) updateValues: (NSIndexPath *) indexPath {
-    return [parameters objectAtIndex: indexPath.section];
+//methods for edit view
+
+- (NSMutableArray *) updateDetailValues: (NSIndexPath *) indexPath {
+    return [inputDetails objectAtIndex: indexPath.section];
 }
 
-//Return the line of text that should go in the specified row
+//methods for output calculations view
 
+- (NSUInteger) numberOfOutputSections{
+    return outputLabels.count;
+}
+
+- (NSUInteger) numberOfOutputRowsPerSection: (NSInteger) section
+{
+    NSArray *outGroup = [outputLabels objectAtIndex: section];
+    return outGroup.count;
+}
+
+- (NSString *) outputHeaderNames: (NSInteger) section {
+    return [outputHeaders objectAtIndex:section];
+}
+
+- (NSArray *) outputLabelNames: (NSIndexPath *) indexPath {
+    return [outputLabels objectAtIndex: indexPath.section];
+}
+
+- (NSArray *) outputDetailValues: (NSIndexPath *) indexPath {
+    return [outputDetails objectAtIndex: indexPath.section];
+}
+
+/*
 - (NSString *) text: (NSIndexPath *) indexPath row: (NSUInteger) row
 {
 	indexPath = [indexPath indexPathByAddingIndex: row];
-    return [properties objectAtIndex: row];
+    return [inputLabels objectAtIndex: row];
 }
+*/
 
+/*
 - (NSUInteger) numberOfRowsInResults: (NSInteger) section {
-    NSArray *resultsGroup = [results objectAtIndex: section];
-    return resultsGroup.count;
+    NSArray *outGroup = [outputDetails objectAtIndex: section];
+    return outGroup.count;
 }
-
-- (NSArray *) getOutputs: (NSIndexPath *) indexPath {
-    return [outputs objectAtIndex: indexPath.section];
-}
-
-- (NSArray *) getResults: (NSIndexPath *) indexPath {
-    return [results objectAtIndex: indexPath.section];
-}
+*/
 
 
-- (void) calculateResults {
+- (void) calculateOutputDetails {
     
     //declare constants
-    static int const lifeExpectancy = 90;
+    self.lifeExpectancy = 90;
     
     //pullout user data arrays
-    NSArray *information = [parameters objectAtIndex: 0];
-    NSArray *savings = [parameters objectAtIndex: 1];
-    NSArray *sep = [parameters objectAtIndex: 2];
-    NSArray *fourK = [parameters objectAtIndex: 3];
-    NSArray *taxable = [parameters objectAtIndex: 4];
-    NSArray *inflationA = [parameters objectAtIndex: 5];
+    NSArray *information = [inputDetails objectAtIndex: 0];
+    NSArray *savings = [inputDetails objectAtIndex: 1];
+    NSArray *sep = [inputDetails objectAtIndex: 2];
+    NSArray *fourK = [inputDetails objectAtIndex: 3];
+    NSArray *taxable = [inputDetails objectAtIndex: 4];
+    NSArray *inflationA = [inputDetails objectAtIndex: 5];
     
     //pullout user parameters from arrays
-    int currentAge = [[information objectAtIndex: 0] intValue];
+    self.currentAge = [[information objectAtIndex: 0] floatValue];
     float requiredIncome = [[information objectAtIndex: 1] floatValue];
     int earlyRetirement = [[information objectAtIndex: 2] intValue];
     int fullRetirement = [[information objectAtIndex: 3] intValue];
@@ -291,10 +326,22 @@
     
     NSString *retired = @"";
     
-    NSMutableArray *totalAssets = [NSMutableArray arrayWithCapacity: time];
-    NSMutableArray *nwDelta = [NSMutableArray arrayWithCapacity: time];
-    NSMutableArray *nwPerc = [NSMutableArray arrayWithCapacity: time];
-    NSLog(@"%d",earlyRetirement);
+    NSMutableArray *totalAssetsA = [NSMutableArray arrayWithCapacity: time];
+    NSMutableArray *nwDeltaA = [NSMutableArray arrayWithCapacity: time];
+    NSMutableArray *nwPercA = [NSMutableArray arrayWithCapacity: time];
+    
+    //new arrays
+    NSMutableArray *earlytIncomeA = [NSMutableArray arrayWithCapacity:time];
+    NSMutableArray *retirementIncomeA = [NSMutableArray arrayWithCapacity:time];
+    NSMutableArray *requiredIncomeA = [NSMutableArray arrayWithCapacity:time];    
+    NSMutableArray *incomeA = [NSMutableArray arrayWithCapacity:time];    
+    NSMutableArray *taxableInvDdA = [NSMutableArray arrayWithCapacity:time];    
+    NSMutableArray *taxableBalA = [NSMutableArray arrayWithCapacity:time];    
+    NSMutableArray *retirementDdA = [NSMutableArray arrayWithCapacity:time];
+    NSMutableArray *savingsBalA = [NSMutableArray arrayWithCapacity:time];
+    NSMutableArray *sepBalA = [NSMutableArray arrayWithCapacity:time];
+    NSMutableArray *fourKBalA = [NSMutableArray arrayWithCapacity:time];
+    NSMutableArray *retiredA = [NSMutableArray arrayWithCapacity:time];
     
     //increment the current age to skip the current year
     ++currentAge;
@@ -309,6 +356,10 @@
         earlyIncome += earlyIncome * inflation;
         retirementIncome += retirementIncome * inflation;
         requiredIncome += requiredIncome * inflation;
+        
+        [earlytIncomeA addObject:[NSNumber numberWithFloat:earlyIncome]];
+        [retirementIncomeA addObject:[NSNumber numberWithFloat:retirementIncome]];
+        [requiredIncomeA addObject:[NSNumber numberWithFloat:requiredIncome]];
 
         
         //determine income
@@ -319,6 +370,8 @@
         } else {
             income = retirementIncome;
         }
+        
+        [incomeA addObject:[NSNumber numberWithFloat:income]];
 
         //determine taxable investment drawdown
         if (age < earlyRetirement) {
@@ -326,6 +379,8 @@
         } else {
             taxableInvDd = requiredIncome - income;
         }
+        
+        [taxableInvDdA addObject:[NSNumber numberWithFloat:taxableInvDd]];
         
         //determine taxable investment value
         if (age < earlyRetirement) {
@@ -335,6 +390,8 @@
         } else {
             taxableBal += (1 - taxableRate) * (taxableBal * taxableRetFull) - taxableInvDd;
         }
+        
+        [taxableBalA addObject:[NSNumber numberWithFloat:taxableBal]];
 
         //determine retirement drawdown
         if (age < earlyRetirement || taxableBal > 0) {
@@ -343,12 +400,16 @@
             retirementDd = requiredIncome - income;
         }
         
+        [retirementDdA addObject:[NSNumber numberWithFloat:retirementDd]];
+        
         //determine savings value
         if (age < earlyRetirement) {
             savingsBal += savingsBal * savingsRet + savingsCon;
         } else {
             savingsBal += savingsBal * savingsRet;
         }
+        
+        [savingsBalA addObject:[NSNumber numberWithFloat:savingsBal]];
         
         //determine SEP value
         if (age < earlyRetirement) {
@@ -359,12 +420,16 @@
             sepBal += sepBal *sepRetFull - retirementDd;
         }
         
+        [sepBalA addObject:[NSNumber numberWithFloat:sepBal]];
+        
         //determine 401k value
         if (age < earlyRetirement) {
             fourKBal += fourKBal * fourKRet + fourKCon;
         } else {
             fourKBal += fourKBal * fourKRet;
         }
+        
+        [fourKBalA addObject:[NSNumber numberWithFloat:fourKBal]];
         
         //determine if retired
         if (age < earlyRetirement) {
@@ -374,43 +439,48 @@
         } else {
             retired = @"YES";
         }
+        
+        [retiredA addObject: retired];
 
         //determine total assets
         float total = savingsBal + sepBal + fourKBal + taxableBal;
-        [totalAssets addObject: [NSNumber numberWithFloat: total]];
+        
+        [totalAssetsA addObject: [NSNumber numberWithFloat: total]];
         
         //determine net worth delta
         if (i > 0) {
-            float ta = [[totalAssets objectAtIndex: i] floatValue];
-            float pta = [[totalAssets objectAtIndex: (i-1)] floatValue];
-            [nwDelta addObject: [NSNumber numberWithFloat:(ta - pta)]];
+            float ta = [[totalAssetsA objectAtIndex: i] floatValue];
+            float pta = [[totalAssetsA objectAtIndex: (i-1)] floatValue];
+            [nwDeltaA addObject: [NSNumber numberWithFloat:(ta - pta)]];
             
             float nwd = ta - pta;
-            [nwPerc addObject: [NSNumber numberWithFloat:(nwd / pta)]];
+            [nwPercA addObject: [NSNumber numberWithFloat:(nwd / pta)]];
             
         }
         
     }
     //add code to put values back into NSMutablArray results
     //could make this into a for loop if field names were added to an enum
-    NSMutableArray *r = [results objectAtIndex: 0];
-    
-    [r replaceObjectAtIndex:0 withObject:[NSNumber numberWithFloat:requiredIncome]];
-    [r replaceObjectAtIndex:1 withObject:[NSNumber numberWithFloat:income]];
-    [r replaceObjectAtIndex:2 withObject:[NSNumber numberWithFloat:savingsBal]];
-    [r replaceObjectAtIndex:3 withObject:[NSNumber numberWithFloat:sepBal]];
-    [r replaceObjectAtIndex:4 withObject:[NSNumber numberWithFloat:fourKBal]];
-    [r replaceObjectAtIndex:5 withObject:[NSNumber numberWithFloat:taxableBal]];
-    
-    [r replaceObjectAtIndex:6 withObject: retired];
-    [r replaceObjectAtIndex:7 withObject:[NSNumber numberWithFloat:taxableInvDd]];
-    [r replaceObjectAtIndex:8 withObject:[NSNumber numberWithFloat:retirementDd]];
+    NSMutableArray *r = [outputDetails objectAtIndex: 0];
 
-    [r replaceObjectAtIndex:9 withObject:[NSNumber numberWithFloat:[[totalAssets lastObject] floatValue]]];
-    [r replaceObjectAtIndex:10 withObject:[NSNumber numberWithFloat:[[nwDelta lastObject] floatValue]]];
-    [r replaceObjectAtIndex:11 withObject:[NSNumber numberWithFloat:[[nwPerc lastObject] floatValue]]];
+    [r replaceObjectAtIndex:1 withObject:requiredIncomeA];
+    [r replaceObjectAtIndex:2 withObject:incomeA];
+    [r replaceObjectAtIndex:3 withObject:savingsBalA];
+    [r replaceObjectAtIndex:4 withObject:sepBalA];
+    [r replaceObjectAtIndex:5 withObject:fourKBalA];
+    [r replaceObjectAtIndex:6 withObject:taxableBalA];
     
-    [results replaceObjectAtIndex:0 withObject: r];
+    [r replaceObjectAtIndex:7 withObject: retiredA];
+    [r replaceObjectAtIndex:8 withObject:taxableInvDdA];
+    [r replaceObjectAtIndex:9 withObject:retirementDdA];
+
+    [r replaceObjectAtIndex:10 withObject:totalAssetsA];
+    [r replaceObjectAtIndex:11 withObject:nwDeltaA];
+    [r replaceObjectAtIndex:12 withObject:nwPercA];
+
+
+    NSLog(@"Array Size: %d",r.count);
+    [outputDetails replaceObjectAtIndex:0 withObject: r];
 }
 
 @end

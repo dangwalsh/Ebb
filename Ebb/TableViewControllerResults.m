@@ -25,6 +25,14 @@
         model = m;
         //indexPath = p;
         self.title = @"Results";
+        
+
+        //[slider addTarget:self 
+        //           action:@selector(sliderValueChanged:) 
+        // forControlEvents:UIControlEventValueChanged];
+        
+        [self sliderValueChanged:slider];
+
     }
     return self;
 }
@@ -50,7 +58,7 @@
 - (void) viewWillAppear: (BOOL) animated
 {
 	[super viewWillAppear: animated];
-    [model calculateResults];
+    [model calculateOutputDetails];
     [self.tableView reloadData];
 }
 
@@ -79,13 +87,13 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return [model numberOfOutputSections];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [model numberOfRowsInResults: section];
+    return [model numberOfOutputRowsPerSection: section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath
@@ -97,6 +105,18 @@
                                       reuseIdentifier:CellIdentifier];
 	}
     // Configure the cell...
+
+    CGRect f = CGRectMake(
+                          10, 
+                          10, 
+                          100, 
+                          20
+                          );
+    slider = [[UISlider alloc] initWithFrame: f];
+    slider.minimumValue = model.currentAge;
+    slider.maximumValue = model.lifeExpectancy - 1;
+    slider.value = n + model.currentAge;
+    slider.continuous = YES;
     
     NSNumberFormatter *formatCur = [[NSNumberFormatter alloc] init];
     [formatCur setNumberStyle:NSNumberFormatterCurrencyStyle];
@@ -105,31 +125,52 @@
     NSNumberFormatter *numTest = [[NSNumberFormatter alloc] init];
     [numTest setNumberStyle:NSNumberFormatterDecimalStyle];
     
-    NSArray *outGroup = [model getOutputs: indexPath];
+    NSArray *outGroup = [model outputLabelNames: indexPath];
+
+    
     cell.textLabel.text = [outGroup objectAtIndex: indexPath.row];
     
-    NSArray *resultsGroup = [model getResults: indexPath];
+    NSArray *resultsGroup = [model outputDetailValues: indexPath];
     
-    NSString *val = [resultsGroup objectAtIndex: indexPath.row];
-    NSLog (@"Value: %@", val );
+    NSArray *array = [resultsGroup objectAtIndex: indexPath.row];
+    
+    if (indexPath.row != 0) {
+        val = [array objectAtIndex:n];
+        NSLog (@"Value: %@", val );
+    } else {
+        cell.accessoryView = slider;
+        [(UISlider *)cell.accessoryView 
+            addTarget:self 
+            action:@selector(sliderValueChanged:) 
+            forControlEvents:UIControlEventValueChanged];
+    }
 
-
-    //float f = [[resultsGroup objectAtIndex: indexPath.row] floatValue];
-
-    if (indexPath.row != 6) {
+    if (indexPath.row != 7 && indexPath.row != 0) {
         float f = [val floatValue];
         if (f < 1.0 && f > 0.0) {
             cell.detailTextLabel.text = [formatPer stringFromNumber:[NSNumber numberWithFloat: f]];
-        } else if (f < 100) {
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%g", 
-                                         [[resultsGroup objectAtIndex: indexPath.row] floatValue]];
         } else {
             cell.detailTextLabel.text = [formatCur stringFromNumber:[NSNumber numberWithFloat: f]];
         }
+    } else if (indexPath.row != 0){
+        NSArray *textArray = [resultsGroup objectAtIndex: indexPath.row];
+        cell.detailTextLabel.text = [textArray objectAtIndex:n];
     } else {
-        cell.detailTextLabel.text = [resultsGroup objectAtIndex: indexPath.row];
+        int adj = n + model.currentAge;
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%i",adj];
     }
+ 
     return cell;
+}
+
+- (void) sliderValueChanged: (id) sender {
+    UISlider *s = sender;
+    if (s.value - model.currentAge >= 0){
+        n = s.value - model.currentAge;
+    }
+    
+    [self.tableView reloadData];
+    NSLog(@"Value: %d", n);
 }
 
 /*

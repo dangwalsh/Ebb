@@ -9,24 +9,36 @@
 #import <Foundation/Foundation.h>
 
 @interface Model : NSObject {
-    NSArray *headers;
-    NSArray *properties;
-    NSArray *outputs;
-    NSMutableArray *parameters;
-    NSMutableArray *results;
-
-
+    NSArray *inputHeaders;
+    NSArray *inputLabels;
+    NSMutableArray *inputDetails;
+    
+    NSArray *outputHeaders;
+    NSArray *outputLabels;
+    NSMutableArray *outputDetails;
 }
 
-- (NSUInteger) numberOfSections;
-- (NSUInteger) numberOfRowsInSection: (NSInteger) section;
-- (NSUInteger) numberOfRowsInResults: (NSInteger) section;
-- (NSString *) text: (NSIndexPath *) indexPath row: (NSUInteger) row;
-- (NSString *) headers: (NSInteger) section;
-- (NSArray *) section: (NSIndexPath *) indexPath;
-- (NSArray *) getValues: (NSIndexPath *) indexPath;
-- (NSMutableArray *) updateValues: (NSIndexPath *) indexPath;
-- (NSArray *) getOutputs: (NSIndexPath *) indexPath;
-- (NSArray *) getResults: (NSIndexPath *) indexPath;
-- (void) calculateResults;
+- (NSUInteger) numberOfInputSections;
+- (NSUInteger) numberOfInputRowsPerSection: (NSInteger) section;
+- (NSString *) inputHeaderNames: (NSInteger) section;
+- (NSArray *) inputLabelNames: (NSIndexPath *) indexPath;
+- (NSArray *) inputDetailValues: (NSIndexPath *) indexPath;
+
+- (NSMutableArray *) updateDetailValues: (NSIndexPath *) indexPath;
+
+- (NSUInteger) numberOfOutputSections;
+- (NSUInteger) numberOfOutputRowsPerSection: (NSInteger) section;
+- (NSString *) outputHeaderNames: (NSInteger) section;//not used yet
+- (NSArray *) outputLabelNames: (NSIndexPath *) indexPath;
+- (NSArray *) outputDetailValues: (NSIndexPath *) indexPath;
+
+- (void) calculateOutputDetails;
+
+//- (NSUInteger) numberOfRowsInResults: (NSInteger) section;
+//- (NSString *) text: (NSIndexPath *) indexPath row: (NSUInteger) row;
+
+@property (nonatomic, assign) float currentAge;
+@property (nonatomic, assign) float lifeExpectancy;
+@property (nonatomic, assign) int resultsAge;
+
 @end

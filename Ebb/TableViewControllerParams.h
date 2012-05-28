@@ -13,7 +13,6 @@
 @interface TableViewControllerParams : UITableViewController  <UITextFieldDelegate> {
     Model *model;
     NSIndexPath *indexPath;
-
     //The currenly selected cell (or nil) and its text field.
 	UITableViewCell *selected;
 	UITextField *textField;

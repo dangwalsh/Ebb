@@ -26,9 +26,28 @@
                                                 model: model
                                                 indexPath: [NSIndexPath indexPathWithIndex: 0]
                                                 ];
+/*    
+    TableViewControllerResults *results = [[TableViewControllerResults alloc] 
+                                           initWithStyle: UITableViewStyleGrouped
+                                           model: model
+                                           indexPath: [NSIndexPath indexPathWithIndex: 0]
+                                           ];
 
-    self.window.rootViewController = [[UINavigationController alloc] 
-                                      initWithRootViewController: tableViewController];
+
+    UISplitViewController *splitViewController = [[UISplitViewController alloc] initWithNibName: nil bundle: nil];
+    
+	splitViewController.viewControllers = [NSArray arrayWithObjects:
+                                           tableViewController,
+                                           results,
+                                           nil
+                                           ];
+    
+	splitViewController.delegate = self;
+    self.window.rootViewController = splitViewController;
+ */
+    
+ self.window.rootViewController = [[UINavigationController alloc] 
+                                   initWithRootViewController: tableViewController];
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -73,4 +92,15 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+#pragma mark -
+#pragma mark Protocol UISplitViewControllerDelegate
+
+//This method keeps the MasterView on the screen in portrait orientation.
+
+- (BOOL) splitViewController: (UISplitViewController *) splitViewController
+	shouldHideViewController: (UIViewController *) viewController
+               inOrientation: (UIInterfaceOrientation) interfaceOrientation
+{
+	return NO;	//No, don't hide the MasterView.
+}
 @end

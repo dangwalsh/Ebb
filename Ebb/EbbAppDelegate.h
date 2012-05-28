@@ -12,7 +12,7 @@
 @class TableViewControllerResults;
 @class Model;
 
-@interface EbbAppDelegate : UIResponder <UIApplicationDelegate>{
+@interface EbbAppDelegate : UIResponder <UIApplicationDelegate, UISplitViewControllerDelegate>{
     Model *model;
 }
 
