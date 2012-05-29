@@ -17,6 +17,8 @@
 		374F68EF156819990086D85A /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 374F68EE156819990086D85A /* Model.m */; };
 		374F6937156928DC0086D85A /* TableViewControllerParams.m in Sources */ = {isa = PBXBuildFile; fileRef = 374F6936156928DC0086D85A /* TableViewControllerParams.m */; };
 		374F693F156958B60086D85A /* TableViewControllerResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 374F693E156958B60086D85A /* TableViewControllerResults.m */; };
+		37B50A6115741CE200F45C64 /* View.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B50A6015741CE200F45C64 /* View.m */; };
+		37B50A6815741DE100F45C64 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37B50A6715741DE100F45C64 /* ViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,10 @@
 		374F6936156928DC0086D85A /* TableViewControllerParams.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewControllerParams.m; sourceTree = "<group>"; };
 		374F693D156958B60086D85A /* TableViewControllerResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewControllerResults.h; sourceTree = "<group>"; };
 		374F693E156958B60086D85A /* TableViewControllerResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewControllerResults.m; sourceTree = "<group>"; };
+		37B50A5F15741CE200F45C64 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
+		37B50A6015741CE200F45C64 /* View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.m; sourceTree = "<group>"; };
+		37B50A6615741DE100F45C64 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		37B50A6715741DE100F45C64 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +100,10 @@
 				374F6936156928DC0086D85A /* TableViewControllerParams.m */,
 				374F693D156958B60086D85A /* TableViewControllerResults.h */,
 				374F693E156958B60086D85A /* TableViewControllerResults.m */,
+				37B50A6615741DE100F45C64 /* ViewController.h */,
+				37B50A6715741DE100F45C64 /* ViewController.m */,
+				37B50A5F15741CE200F45C64 /* View.h */,
+				37B50A6015741CE200F45C64 /* View.m */,
 				374F68CD1568048B0086D85A /* Supporting Files */,
 			);
 			path = Ebb;
@@ -179,6 +189,8 @@
 				374F68EF156819990086D85A /* Model.m in Sources */,
 				374F6937156928DC0086D85A /* TableViewControllerParams.m in Sources */,
 				374F693F156958B60086D85A /* TableViewControllerResults.m in Sources */,
+				37B50A6115741CE200F45C64 /* View.m in Sources */,
+				37B50A6815741DE100F45C64 /* ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -34,6 +34,8 @@
 
 - (void) calculateOutputDetails;
 
+- (NSArray *) outputDetailValuesToPlot;
+
 //- (NSUInteger) numberOfRowsInResults: (NSInteger) section;
 //- (NSString *) text: (NSIndexPath *) indexPath row: (NSUInteger) row;
 

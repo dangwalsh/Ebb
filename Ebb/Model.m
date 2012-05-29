@@ -275,7 +275,7 @@
 - (void) calculateOutputDetails {
     
     //declare constants
-    self.lifeExpectancy = 90;
+    self.lifeExpectancy = 100;
     
     //pullout user data arrays
     NSArray *information = [inputDetails objectAtIndex: 0];
@@ -481,6 +481,10 @@
 
     NSLog(@"Array Size: %d",r.count);
     [outputDetails replaceObjectAtIndex:0 withObject: r];
+}
+
+- (NSArray *) outputDetailValuesToPlot{
+    return [outputDetails objectAtIndex: 0];
 }
 
 @end

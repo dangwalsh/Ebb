@@ -26,11 +26,6 @@
         //indexPath = p;
         self.title = @"Results";
         
-
-        //[slider addTarget:self 
-        //           action:@selector(sliderValueChanged:) 
-        // forControlEvents:UIControlEventValueChanged];
-        
         [self sliderValueChanged:slider];
 
     }

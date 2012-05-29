@@ -10,6 +10,7 @@
 #import "TableViewController.h"
 #import "TableViewControllerResults.h"
 #import "Model.h"
+#import "ViewController.h"
 
 @implementation EbbAppDelegate
 
@@ -21,33 +22,44 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     model = [[Model alloc] init];
+    
     TableViewController *tableViewController = [[TableViewController alloc]
                                                 initWithStyle: UITableViewStyleGrouped
                                                 model: model
                                                 indexPath: [NSIndexPath indexPathWithIndex: 0]
                                                 ];
-/*    
+/**/ 
+    ViewController *viewController = [[ViewController alloc] 
+                                     initWithNibName:nil 
+                                     bundle:nil 
+                                     model:model
+                                     ];
+/**/
+/**    
     TableViewControllerResults *results = [[TableViewControllerResults alloc] 
                                            initWithStyle: UITableViewStyleGrouped
                                            model: model
                                            indexPath: [NSIndexPath indexPathWithIndex: 0]
                                            ];
-
+/**/
 
     UISplitViewController *splitViewController = [[UISplitViewController alloc] initWithNibName: nil bundle: nil];
     
 	splitViewController.viewControllers = [NSArray arrayWithObjects:
                                            tableViewController,
-                                           results,
+                                           viewController,
                                            nil
                                            ];
     
 	splitViewController.delegate = self;
-    self.window.rootViewController = splitViewController;
- */
     
- self.window.rootViewController = [[UINavigationController alloc] 
+    self.window.rootViewController = splitViewController;
+    
+//comment out all of the splitvew initialization above and add back navigation init below to get back to where we were  
+/**  
+    self.window.rootViewController = [[UINavigationController alloc] 
                                    initWithRootViewController: tableViewController];
+/**/
     [self.window makeKeyAndVisible];
     return YES;
 }

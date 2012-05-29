@@ -57,6 +57,7 @@
 - (void) viewWillAppear: (BOOL) animated
 {
 	[super viewWillAppear: animated];
+    [model calculateOutputDetails];
     [self.tableView reloadData];
 }
 
